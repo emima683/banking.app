@@ -1,14 +1,14 @@
-def get_cutomer_infor():
+def get_customer_info():
     print("---Enter Customer Details---")
     name = input("Enter your name:")
     address = input("Enter your address:")
     username = input("Enter your username:")
-    password = ("Enter your password:")
+    password = input("Enter your password:")
     return [name, address, username, password]
 
 def save_customer(customer):
     with open("customer.txt", "a") as file:
-        file.write(f"{create_customer_next_id()},{customer(0)},{customer(1)}\n")
+        file.write(f"{create_customer_next_id()},{customer[0]},{customer[1]}\n")
     print("customer data saved")
 
 def save_user(customer):
@@ -22,13 +22,13 @@ def save_user(customer):
 
 def create_customer_next_id():
     try:
-        with open("customer.txt", "r") as  file:
+        with open("customer.txt", "r") as customer_file:
             lines = customer_file.readlines()
             if not lines:
                 return"c1"
-                last_id_str = lines[-1].split(",")[0]
-                last_id_num = int(last_id_str[1:])
-                return f"c{last_id_num +1}"
+            last_id_str = lines[-1].split(",")[0]
+            last_id_num = int(last_id_str[1:])
+            return f"c{last_id_num +1}"
     except FileNotFoundError:
         return "c1"
 
@@ -61,38 +61,40 @@ def create_account():
     except ValueError:
         print("Invalid input. Enter the number.")
         return 
-    with open("account.txt", "a") as file:
+    with open("accounts.txt", "a") as file:
         file.write(f"{name}, {password}, {acc_number}, {balance}\n")
         print("Account created successfully and saved to file.")
 
 #Deposit.............................................................................
 
-def deposit(account_number, amount)
-    if amount <=0:
-        print ("Invalid deposit amount. Amount must be greater than 0.")
+def deposit(account_number, amount):
+    if amount <= 0:
+        print("Invalid deposit amount. Amount must be greater than 0.")
         return
     try:
         accounts = []
         account_found = False
-        with open("account.txt", "r") as file:
-            name, password, acc_number, balance = line.strip(.split(","))
-            if acc_number == account_number:
-                account_found = True
-                new_balance = float(balance) + amount
-                print(f"successfully deposited {amount}. New balance{new_balance}")
+        
+        with open("accounts.txt", "r") as file:
+            for line in file:
+                name, password, acc_number, balance = line.strip().split(",")
+                if acc_number == account_number:
+                    account_found = True
+                    new_balance = float(balance) + amount
+                    print(f"successfully deposited {amount}. New balance: {new_balance}")
 
-                line = f"{name},{password},{acc_number},{new_balance}\n"
-                accounts.append(line)
+                    line = f"{name},{password},{account_number},{new_balance}\n"
+                    accounts.append(line)
 
-                record_transaction(account_number)
-            else:
-                accounts.append(line)
+                    record_transaction(account_number, "Deposit", amount, new_balance)
+                else:
+                    accounts.append(line)
 
         if not account_found:
             print("Account not found.")
 
         with open("accounts.txt", "w") as file:
-            file writelines(accounts)
+            file.writelines(accounts)
     except IOError:
         print("An error accurred while reading or writing to the file")
 
@@ -102,60 +104,63 @@ def withdraw(account_number, amount):
     if amount <=0:
         print("Invalid withdrawalamount. Must be grater than 0")
         return
-        try:
-            accounts = []
-            account_found = False
+    try:
+        accounts = []
+        account_found = False
             
             
- # Read account from the file........................................................           
-             with open("account.txt, "r"") as file:
-                if line in file:
+   # Read account from the file.......................................          
+        with open("accounts.txt", "r") as file:
+            for line in file:
                 name, password, acc_number , balance, line.strip.split(",")
                 if acc_number ==account_number:
                     account_found = True
-                    balance float (balance)
-        print (Insufficient funds.)
-            return 
-    else: 
-        balance-=amount:
-        print (f"successfully withdrwan {amount},New_balance{balancw}")
-        line = f"{name }, {password}, {acc_number}, {balance}\n"
-        record_transaction (amount_number, "withdraw",amount balance)
-        accounts.append(line)
-        else:
-             accounts.append(line)
-             except FileNotFoundError:
-                print ("account file not found.")
-                return 
-             if not account_found:
-                print("Account not found.")
-                return
+                    balance = float(balance)
+                    if amount > balance:
+                        print("Insufficient funds.")
+                        return 
+                    else: 
+                        balance-=amount
+                        print (f"successfully withdrwan {amount}. New_balance: {balancw}")
+                        line = f"{name }, {password}, {acc_number}, {balance}\n"
+                        record_transaction (account_number, "withdraw", amount, balance)
+                        accounts.append(line)
+                else:
+                    accounts.append(line)
+    except FileNotFoundError:
+        print ("Accounts file not found.")
+        return 
+    if not account_found:
+        print("Account not found.")
+        return
+# write update accounts..........................................
+    try:
+        with open("accounts.txt", "w") as file:
+            file.writelines(accounts)
+    except IOError:
+        print("An error occurred while reading or writing to yhe file.")
 
-            try:
-                with open("accounts.txt", "w") as file:
-                    file.writelines(accounts)
-             except IOError:
-                print("An error occurred while reading or writing to yhe file.")
 def check_balance():
-    customer_acc-number = input ("Enter the account number:")
+    customer_acc_number = input ("Enter the account number:")
     try:
         with open("accounts.txt", "r") as file:
             for line in file :
-                name, password, acc_nnumber balance = line stripe .split(",")
+                name, password, acc_number, balance = line.stripe().split(",")
                 if acc_number == customer_acc_number:
                     print(f"Account holder: {name}")
                     print(f"Account number:{acc_number}") 
                     print(f"Current balance:{balance}")
                     return
-             print("Account not found.") 
-         except FileNotFoundError:
+            print("Account not found.") 
+    except FileNotFoundError:
             print("Account file not found.")
-        except IOError:
+    except IOError:
             print("An error occurred while reading the file")  
 
 #Transaction history........................................................................
 
- def record_transaction(account_number, transaction_type, amount, new_balance):
+def record_transaction(account_number, transaction_type, amount, new_balance):
+    
     try:
         with open("Transaction.txt", "a") as file:
             file.write(f"{account_number},{transaction_type},{amount},{new_balance}\n")
@@ -163,7 +168,7 @@ def check_balance():
         print("Error occurred while writing the transaction history")
 
 
- def display_transaction_history(account_number):
+def display_transaction_history(account_number):
     try:
         with open("transaction.txt", "r") as file:
             print("\n---Trasaction History---")
@@ -177,10 +182,10 @@ def check_balance():
                     found = True
             if not found:
                 print("No transaction found for this account.")
-        except FileNotFoundError:
-            print("Transaction file not found.")
-        except IOError:
-            print("Error occurred whiloe reading the transaction history.")
+    except FileNotFoundError:
+        print("Transaction file not found.")
+    except IOError:
+        print("Error occurred whiloe reading the transaction history.")
 
 #Transaction between 2 accounts.............................................................
 
@@ -189,13 +194,14 @@ def transfer(sender_acc, receiver_acc, amount):
         print("Transfer amount must be greater than 0.")
         return
 
-        try: 
-            accounts = []
-            sender_found = False
-            receiver_found = False
-            sender_balance = 0.0
-            receiver_balance = 0.0
-         with open ("accounts.txt", "r") as file:
+    try: 
+        accounts = []
+        sender_found = False
+        receiver_found = False
+        sender_balance = 0.0
+        receiver_balance = 0.0
+         
+        with open ("accounts.txt", "r") as file:
             for line in file:
                 name, password, acc_number, balance, = line.stripe().split(",")
                 balance = float(balance)
@@ -212,98 +218,98 @@ def transfer(sender_acc, receiver_acc, amount):
                     receiver_found = True
                     receiver_balance = Balance + amount
                     updated_line = f"{name},{password},{acc_number},{receiver_balance}\n"
-                    else:
-                        accounts.append(line)
+                else:
+                    accounts.append(line)
                        
-            if not sender_found:
-                print("Sender account not found.") 
-                return
-                if not reciever_found:
-                    print("receiver account not found.") 
-                return
+        if not sender_found:
+            print("Sender account not found.") 
+            return
+        if not reciever_found:
+            print("receiver account not found.") 
+            return
 
         with open("account.txt", "w") as file:
             file.writelines(accounts) 
 
-            record_transaction(sender_acc,"transfer out", amount, sender_balance)
-            record_transaction(receiver_acc,"transfer in", amount, receiver_balance)
+        record_transaction(sender_acc,"transfer out", amount, sender_balance)
+        record_transaction(receiver_acc,"transfer in", amount, receiver_balance)
 
-            print(f"Successfully transferred {amount} from {sender_acc} to {receiver_acc}.")
+        print(f"Successfully transferred {amount} from {sender_acc} to {receiver_acc}.")
 
-        except FileNotFoundError:
-            print("Accounts file not found.")
-        except IOError:
-            print("Error occured while accessing the file")
+    except FileNotFoundError:
+        print("Accounts file not found.")
+    except IOError:
+        print("Error occured while accessing the file")
 
 #Main user menu.................................................................................
 
 def user_registration():
     while True:
-    print("\n---- Welcome to Mini Banking System----")
-    print("1. Register User")
-    print("2. Login")
-    print("3. Exit")
-    choice = input("Enter your choice(1-3):")
+        print("\n---- Welcome to Mini Banking System----")
+        print("1. Register User")
+        print("2. Login")
+        print("3. Exit")
+        choice = input("Enter your choice(1-3):")
 
-    if choice == "1":
-        customer = get_customer_info()
-        if customer:
-            save_customer(customer)
-            save_usser(customer)
+        if choice == "1":
+            customer = get_customer_info()
+            if customer:
+                save_customer(customer)
+                save_user(customer)
 
-    elif choice == "2":
-        if user_login ():
-            while True:
-                print("\n--- Main Menu ---")
-                print("1. Create Bank Account")
-                print("2. Deposit Money")
-                print("3. Withdraw Money")
-                print("4. Check Balance")
-                print("5. Transaction History")
-                print("6. Transaction between two accounts")
-                print("7. Logout")
-            menu_choice = input("Enter your choice (1-7):")
+        elif choice == "2":
+            if user_login ():
+                while True:
+                    print("\n--- Main Menu ---")
+                    print("1. Create Bank Account")
+                    print("2. Deposit Money")
+                    print("3. Withdraw Money")
+                    print("4. Check Balance")
+                    print("5. Transaction History")
+                    print("6. Transaction between two accounts")
+                    print("7. Logout")
+                    menu_choice = input("Enter your choice (1-7):")
 
-            if menu_choice == "1":
-                create_account()
-            elif menu_choice == "2":
-                acc = input("Enter account number:")
-                try:
-                    amt = float(input("Enter deposit amount:"))
-                    deposit(acc, amt)
-                except ValueError:
-                    print("Invalid amount.")
-            elif menu_choice == "3":
-                acc = input("Enter account number")
-                try:
-                    amt = float(input("Enter withdrawal amount:"))
-                    withdraw(acc, amt)
-                except ValueError:
-                    print("Invalid amount.")
-            elif menu_choice == "4":
-                check_balance()
-            elif menu_choice == "5":
-                acc = input("Enter account number:")
-                display_transaction_history(acc)
-            elif menu_choice == "6":
-                sender_acc = input("Enter the account number of sender:")
-                receiver_acc = input("Enter the account number of receiver:")
-                try:
-                    amount = float(input("Enter the transfer amount:"))
-                    transfer(sender_acc, receiver_acc, amount)
-                except ValueError:
-                    print("Invalid amount.")
-            elif menu_choice == "7":
-                print("Logged out.")
-                break
-            else:
-                print("Invalid option.")
+                    if menu_choice == "1":
+                        create_account()
+                    elif menu_choice == "2":
+                        acc_number = input("Enter account number:")
+                        try:
+                            amt = float(input("Enter deposit amount:"))
+                            deposit(acc, amt)
+                        except ValueError:
+                            print("Invalid amount.")
+                    elif menu_choice == "3":
+                        acc = input("Enter account number")
+                        try:
+                            amt = float(input("Enter withdrawal amount:"))
+                            withdraw(acc, amt)
+                        except ValueError:
+                            print("Invalid amount.")
+                    elif menu_choice == "4":
+                        check_balance()
+                    elif menu_choice == "5":
+                        acc = input("Enter account number:")
+                        display_transaction_history(acc)
+                    elif menu_choice == "6":
+                        sender_acc = input("Enter the account number of sender:")
+                        receiver_acc = input("Enter the account number of receiver:")
+                        try:
+                            amount = float(input("Enter the transfer amount:"))
+                            transfer(sender_acc, receiver_acc, amount)
+                        except ValueError:
+                            print("Invalid amount.")
+                    elif menu_choice == "7":
+                        print("Logged out.")
+                        break
+                    else:
+                        print("Invalid option.")
 
-    elif choice == "3":
-        print("Thank you for using Mini Banking System. Have a Nice Day.")
-        break
-    else:
-        print("Invalid choice. Try again.")
+        elif choice == "3":
+            print("Thank you for using Mini Banking System. Have a Nice Day.")
+            break
+        else:
+            print("Invalid choice. Try again.")
 
 
 user_registration()
