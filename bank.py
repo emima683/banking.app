@@ -74,9 +74,9 @@ def deposit(account_number, amount):
         return
     try:
         account_found = 0
-        fill=open("accounts.txt", "r")
-        data=fill.readlines()
-        fill.close()
+        file=open("accounts.txt", "r")
+        data=file.readlines()
+        file.close()
         for i in data:
             m=i.split(",")
             if int(m[2])==int(account_number):
@@ -86,12 +86,12 @@ def deposit(account_number, amount):
                 account_found=10
             else:
                 pass
-        fill=open("accounts.txt", "w")
-        fill.writelines(data)
-        fill.close()
-        fill=open("accounts.txt", "a")
-        fill.write(f"{m[0]},{m[1]},{m[2]},{m[3]},\n")
-        fill.close()
+        file=open("accounts.txt", "w")
+        file.writelines(data)
+        file.close()
+        file=open("accounts.txt", "a")
+        file.write(f"{m[0]},{m[1]},{m[2]},{m[3]},\n")
+        file.close()
         if  account_found==0:
             print("Account not found.")
         else:
@@ -108,9 +108,9 @@ def withdraw(account_number, amount):
     else:
         try:
             account_found = 0
-            fill=open("accounts.txt", "r")
-            data=fill.readlines()
-            fill.close()
+            file=open("accounts.txt", "r")
+            data=file.readlines()
+            file.close()
             for i in data:
                 m=i.split(",")
                 if int(m[2])==int(account_number):
@@ -122,12 +122,12 @@ def withdraw(account_number, amount):
                     else:
                         m[3]=int(gg)-int(amount)
                         account_found=10
-                        fill=open("accounts.txt", "w")
-                        fill.writelines(data)
-                        fill.close()
-                        fill=open("accounts.txt", "a")
-                        fill.write(f"{m[0]},{m[1]},{m[2]},{m[3]},\n")
-                        fill.close()
+                        file=open("accounts.txt", "w")
+                        file.writelines(data)
+                        file.close()
+                        file=open("accounts.txt", "a")
+                        file.write(f"{m[0]},{m[1]},{m[2]},{m[3]},\n")
+                        file.close()
                         return
                 else:
                     pass
@@ -145,9 +145,9 @@ def check_balance():
     customer_acc_number = input ("Enter the account number:")
     try:
          
-        fill=open("accounts.txt", "r")
-        data=fill.readlines()
-        fill.close()
+        file=open("accounts.txt", "r")
+        data=file.readlines()
+        file.close()
         for i in data:
             m=i.split(",")
             if int(m[2])==int(customer_acc_number):
