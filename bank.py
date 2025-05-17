@@ -1,3 +1,4 @@
+
 import os
 
 def get_customer_info():
@@ -34,6 +35,31 @@ def create_customer_next_id():
     except FileNotFoundError:
         return "c1"
 
+         #---Check Admin Status---..........................................
+def check_admin_status():
+    role user_name=input("Enter the name:")
+    
+    print("You are an Admin")
+        for i in data:
+
+        else:
+            print("You are a Customer")
+
+
+
+          #Display Customer list...............................................
+def display_customer_list():
+    customer_id=int(input("Enter the ID:"))
+    customer_name=("Enter the name:")
+    try:
+        with open("customers.txt", 'r') as customer_list:
+            lines = customer_list.readlines()
+            if not lines:
+            
+            customer_id = int{customer_id + 1}
+            except FileNotFoundError:
+
+
 #user login check...................................................................
 
 def user_login():
@@ -50,6 +76,16 @@ def user_login():
         pass
     print("Invalid username or password.")
     return False
+
+
+          #Minimum Password Length...........................................................
+    pass_validate = len(password)>=6:
+
+    except ValueError:
+        print("Password must be atleast 6 characters.")
+
+        print("Invalid Password")
+
 
 #Create a bank account..............................................................
 
@@ -215,8 +251,10 @@ def user_registration():
                     print("3. Withdraw Money")
                     print("4. Check Balance")
                     print("5. Transaction History")
-                    print("6. Logout")
-                    choice = input("Enter your choice (1-7):")
+                    print("6. Display Customer List")
+                    print("7. Check Admin Status")
+                    print("8. Logout")
+                    choice = input("Enter your choice (1-8):")
 
 
                     if choice == "1":
@@ -242,9 +280,18 @@ def user_registration():
                         display_transaction_history(acc)
                     
                     elif choice == "6":
+                        id = input("Enter the ID:")
+                        name = input("Enter the name:")
+                        display_customer_list()
+                    
+                    elif choice == "7":
+                        check_admin_status()
+                    
+                    elif choice == "8":
                         print("Logged out.")
                         break
-                    else:
+                    
+                else:
                         print("Invalid option.")
 
         elif choice == "3":
